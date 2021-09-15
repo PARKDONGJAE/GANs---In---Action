@@ -1,2 +1,2 @@
-# GANs---In---Action
+# GANs In Action
 GAN study
