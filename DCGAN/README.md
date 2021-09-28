@@ -49,14 +49,13 @@ CNN을 활용해서 GAN을 확장하려는 연구는 이전까지 성공적이�
 > <details>
 > <summary>Fractional-strided convolution</summary>
 >
-
 > </details>
-
+> 
 > ### Fractional-strided convolution(Transposed convolution)
 > 
 > Fractional-strided convolution은 흔히 transposed convolution, deconvolution 등의 이름으로 불리는 연산이다(저자에 따르면 엄밀히 말해 fractional-strided convolution과 deconvolution은 서로 다르다). 
 >
-> 아래 그림은 $4 , 4$ 이미지에 $3 , 3$ 컨볼루션 필터를 적용한 예시로, 결과는 $2 , 2$ 크기의 피쳐 맵이다. 패딩은 적용하지 않았고, 스트라이드는 1이다.
+> 아래 그림은 `(4, 4)` 이미지에 `(3, 3)` 컨볼루션 필터를 적용한 예시로, 결과는 `(2, 2)` 크기의 피쳐 맵이다. 패딩은 적용하지 않았고, 스트라이드는 1이다.
 >
 > <p align="center"><img src="../assets/DCGAN/DCGAN-09.png" width="75%"></img></p>
 >
@@ -64,7 +63,7 @@ CNN을 활용해서 GAN을 확장하려는 연구는 이전까지 성공적이�
 >
 > <p align="center"><img src="../assets/DCGAN/DCGAN-10.gif" width="75%"></img></p>
 >
-> 예시에서는 $3 , 3$ 커널을 사용하여 $2 , 2$ 피쳐 맵을 $4 , 4$ 이미지로 보내고 있으며, 이미지와 피쳐 맵 사이의 연결 관계가 위의 컨볼루션 연산과 동일하게 유지되고 있다. Fractional-strided convolution 을 사용하면서 아래 그림처럼 겹치는 영역이 발생하는 경우 덧셈 연산으로 처리하게 되는데, 이는 생성된 이미지에서 흔히 나타나는 체커보드 아티팩트의 원인이 된다. 
+> 예시에서는 `(3, 3)` 커널을 사용하여 `(2, 2)` 피쳐 맵을 `(4, 4)` 이미지로 보내고 있으며, 이미지와 피쳐 맵 사이의 연결 관계가 위의 컨볼루션 연산과 동일하게 유지되고 있다. Fractional-strided convolution 을 사용하면서 아래 그림처럼 겹치는 영역이 발생하는 경우 덧셈 연산으로 처리하게 되는데, 이는 생성된 이미지에서 흔히 나타나는 체커보드 아티팩트의 원인이 된다. 
 
 ## 4. Details of adversarial training
 
@@ -72,14 +71,14 @@ CNN을 활용해서 GAN을 확장하려는 연구는 이전까지 성공적이�
 
 - 전처리: [-1, 1] 사이로 스케일링
 - 배치 사이즈: 128
-- 판별기 활성화함수: $LeakyReLU(0.2)$
-- 옵티마이저: $Adam(lr = 0,0002, \beta_1 = 0.5)$
+- 판별기 활성화함수: LeakyReLU
+- 옵티마이저: Adam
 
 ### 4.1. LSUN
 
 <p align="center"><img src="../assets/DCGAN/DCGAN-01.png" width="75%"></img></p>
 
-연구진은 약 300만 장의 이미지가 포함된 LSUN bedrooms 데이터셋으로 모델을 학습시켰다. 위 그림은 생성기의 구조를 나타내는데, 먼저 100차원 잠재벡터를 입력으로 받아 FC 레이어에서 $(4 , 4 , 1024)$ 크기의 피쳐 맵으로 매핑한다. 이후 fractional-strided convolution 레이어로 업샘플링을 거쳐 최종적으로 3채널 $(64 , 64 , 3)$ 크기의 이미지를 생성한다.
+연구진은 약 300만 장의 이미지가 포함된 LSUN bedrooms 데이터셋으로 모델을 학습시켰다. 위 그림은 생성기의 구조를 나타내는데, 먼저 100차원 잠재벡터를 입력으로 받아 FC 레이어에서 `(4, 4, 1024)` 크기의 피쳐 맵으로 매핑한다. 이후 fractional-strided convolution 레이어로 업샘플링을 거쳐 최종적으로 3채널 `(64, 64, 3)` 크기의 이미지를 생성한다.
 
 적대적 생성모델이 이미지 생성에서 어느 정도의 성공을 거두기는 했으나, 오버피팅이나 데이터 암기 등의 문제가 제기되어왔다. 연구진은 학습 과정에서 모델이 데이터를 암기하는 현상을 방지하기 위해 오토인코더를 활용하여 데이터셋의 중복 제거를 시행하였고, 1 에포크 학습 후에 모델이 생성한 이미지를 점검하였다. 학습 스케줄에서 매우 작은 학습률(learning rate)과 미니배치 경사하강법을 사용하였기 때문에 1 에포크 학습 후의 모델은 데이터를 외운 상태라고 보기는 어렵다. 생성된 결과물은 모델이 데이터를 외우지 않고, 일반적인 특성 표현을 잘 학습하였음을 보여준다. 
 
@@ -91,11 +90,11 @@ CNN을 활용해서 GAN을 확장하려는 연구는 이전까지 성공적이�
 
 ### 4.3. ImageNet-1K
 
-ImageNet-1K 데이터셋을 32 X 32 크기로 잘라 활용하였다.
+ImageNet-1K 데이터셋을 `(32, 32)` 크기로 잘라 활용하였다.
 
 ## 5. Empirical validation of DCGANs capabilities
 
-비지도 학습의 모델의 퀄리티를 측정하기 위해서 가장 많이 사용하는 기법은 비지도 학습 모델을 통해 추출된 특성에 선형 분류기를 결합하여 분류 성능을 평가하는 것이다. 본 연구에서는 ImageNet-1K 데이터셋으로 학습한 DCGAN 모델을 CIFAR-10, StreetView House Numbers 데이터셋에 적용하여 피쳐를 추출하였다. 연구진은 판별기의 각 레이어에서 나오는 피쳐 맵을 $(4, 4)$ 크기로 풀링한 후 이어붙이는 방식으로 피쳐를 추출하였다. 이후 추출된 피쳐에 선형 SVM을 적용하여 분류 성능을 측정하였다. 
+비지도 학습의 모델의 퀄리티를 측정하기 위해서 가장 많이 사용하는 기법은 비지도 학습 모델을 통해 추출된 특성에 선형 분류기를 결합하여 분류 성능을 평가하는 것이다. 본 연구에서는 ImageNet-1K 데이터셋으로 학습한 DCGAN 모델을 CIFAR-10, StreetView House Numbers 데이터셋에 적용하여 피쳐를 추출하였다. 연구진은 판별기의 각 레이어에서 나오는 피쳐 맵을 `(4, 4)` 크기로 풀링한 후 이어붙이는 방식으로 피쳐를 추출하였다. 이후 추출된 피쳐에 선형 SVM을 적용하여 분류 성능을 측정하였다. 
 
 ### 5.1. Classifying CIFAR-10 using GANs as a feature extractor
 
@@ -146,7 +145,7 @@ DCGAN은 SVHN-1000 classes 데이터셋에서 테스트 에러 22.48%로 SOTA �
 <img src="../assets/DCGAN/DCGAN-08.png" width="75%"></img>
 </p>
 
-위의 사진에서는 안경을 쓴 남성, 안경을 쓰지 않은 남성, 안경을 쓰지 않은 여성의 잠재벡터를 활용하여 $(glasses + male) - male + female$ 의 연산을 수행하였다. 이렇게 얻은 잠재벡터를 통해 이미지를 생성한 결과 안경을 쓴 여성의 이미지$(glasses + female)$를 얻을 수 있었다. 
+위의 사진에서는 안경을 쓴 남성, 안경을 쓰지 않은 남성, 안경을 쓰지 않은 여성의 잠재벡터를 활용하여 (glasses + male) - male + female 의 연산을 수행하였다. 이렇게 얻은 잠재벡터를 통해 이미지를 생성한 결과 안경을 쓴 여성의 이미지(glasses + female)를 얻을 수 있었다. 
 
 <p align="center">
 <img src="../assets/DCGAN/DCGAN-11.png" width="75%"></img>
